@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SiteSettings {
+  id        Int      @id @default(1)
+  data      String   @default("{}")
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  nameRu     String
+  nameEn     String   @default("")
+  nameUz     String   @default("")
+  descRu     String   @default("")
+  descEn     String   @default("")
+  descUz     String   @default("")
+  priceFrom  String   @default("")
+  unit       String   @default("")
+  category   String?
+  imageUrl   String?
+  imageAltRu String   @default("")
+  imageAltEn String   @default("")
+  imageAltUz String   @default("")
+  isPopular  Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
