@@ -67,13 +67,29 @@ export default async function LocalizedCatalogPage({ params }: { params: Promise
                 key={product.id}
                 className="group rounded-[30px] border border-inkBlue/10 bg-white/68 p-5 shadow-card transition duration-300 hover:-translate-y-1 hover:border-turquoise/30 hover:shadow-soft"
               >
-                <div className="relative h-52 overflow-hidden rounded-[22px] bg-[linear-gradient(180deg,#fbf5ea,#ead5b3)]">
-                  <AssetImage src={product.image} alt={product.imageAlt} sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw" fallbackLabel={`Upload ${product.image.split("/").pop()}`} />
-                  <div className="absolute left-4 top-4 rounded-full border border-white/45 bg-cream/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-inkBlue shadow-card">
-                    {product.category}
+                <Link
+                  href={`/${currentLocale}/contacts`}
+                  data-qa="catalog-card-link"
+                  data-analytics-event="order_click"
+                  data-analytics-section="catalog"
+                  data-analytics-label={product.slug}
+                  className="block focus:outline-none"
+                >
+                  <div className="relative h-52 overflow-hidden rounded-[22px] bg-[linear-gradient(180deg,#fbf5ea,#ead5b3)]">
+                    <AssetImage
+                      src={product.image}
+                      alt={product.imageAlt}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                      fallbackLabel={`Upload ${product.image.split("/").pop()}`}
+                    />
+                    <div className="absolute left-4 top-4 rounded-full border border-white/45 bg-cream/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-inkBlue shadow-card">
+                      {product.category}
+                    </div>
                   </div>
-                </div>
-                <h2 className="mt-5 font-display text-3xl text-chocolate">{product.title}</h2>
+                  <h2 className="mt-5 font-display text-3xl text-chocolate transition group-hover:text-inkBlue">
+                    {product.title}
+                  </h2>
+                </Link>
                 <p className="mt-3 text-sm leading-6 text-chocolate/72">{product.description}</p>
                 <div className="mt-3 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-chocolate/45">
                   <span>{copy.quickPreview as string}</span>

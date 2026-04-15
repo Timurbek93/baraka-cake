@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@/components/analytics";
+import { Analytics } from "@vercel/analytics/next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { defaultLocale } from "@/lib/i18n";
 import { getSiteUrl, siteName } from "@/lib/seo";
@@ -64,6 +65,7 @@ export default function RootLayout({
     <html lang="ru">
       <body className={`${manrope.variable} ${cormorant.variable} bg-sand text-chocolate antialiased`}>
         <GoogleAnalytics />
+        <Analytics />
         {children}
       </body>
     </html>
