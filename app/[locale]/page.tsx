@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 
 import { PrimaryButton, SecondaryButton, Section, Container } from "@/components/ui";
 import Link from "next/link";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 
 export default async function LocalizedHomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -138,14 +139,17 @@ export default async function LocalizedHomePage({ params }: { params: Promise<{ 
                   </p>
                   <p className="text-xs text-chocolate/55">{product.unit}</p>
                 </div>
-                <Link
-                  href={`/${currentLocale}/catalog`}
-                  data-analytics-event="catalog_open"
-                  data-analytics-section="featured_products"
-                  className="text-sm font-semibold text-turquoise transition group-hover:text-inkBlue"
-                >
-                  {copy.viewCatalog as string}
-                </Link>
+                <div className="flex items-center gap-3">
+                  <AddToCartButton productId={product.id} />
+                  <Link
+                    href={`/${currentLocale}/catalog`}
+                    data-analytics-event="catalog_open"
+                    data-analytics-section="featured_products"
+                    className="text-sm font-semibold text-turquoise transition group-hover:text-inkBlue"
+                  >
+                    {copy.viewCatalog as string}
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

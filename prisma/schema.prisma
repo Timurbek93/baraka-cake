@@ -7,6 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  PREPARING
+  READY
+  DELIVERING
+  COMPLETED
+  CANCELLED
+}
+
+enum ContactMethod {
+  WHATSAPP
+  TELEGRAM
+  PHONE
+}
+
+enum FulfillmentMethod {
+  DELIVERY
+  PICKUP
+}
+
+enum AnalyticsEventName {
+  product_view
+  add_to_cart
+  remove_from_cart
+  begin_checkout
+  submit_order
+}
+
 model SiteSettings {
   id        Int      @id @default(1)
   data      String   @default("{}")
@@ -23,6 +52,8 @@ model Product {
   descEn     String   @default("")
   descUz     String   @default("")
   priceFrom  String   @default("")
+  /// Цена в сумах (целое число) — база для корзины/заказов/аналитики.
+  priceFromNumber Int @default(0)
   unit       String   @default("")
   category   String?
   imageUrl   String?
@@ -34,4 +65,89 @@ model Product {
   active     Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+}
+
+model Cart {
+  id        String    @id @default(cuid())
+  sessionId String    @unique
+  items     CartItem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model CartItem {
+  id            String   @id @default(cuid())
+  cartId        String
+  productId     String
+  qty           Int      @default(1)
+  unitPrice     Int      @default(0) // сумах
+  titleSnapshot String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+  @@index([productId])
+}
+
+model Order {
+  id              String            @id @default(cuid())
+  orderNumber     Int               @unique
+  publicCode      String            @unique
+  status          OrderStatus       @default(NEW)
+  customerName    String            @default("")
+  customerPhone   String            @default("")
+  contactMethod   ContactMethod     @default(WHATSAPP)
+  fulfillment     FulfillmentMethod @default(PICKUP)
+  deliveryAddress String            @default("")
+  comment         String            @default("")
+  currency        String            @default("UZS")
+  totalAmount     Int               @default(0) // сумах
+  items           OrderItem[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model OrderItem {
+  id            String   @id @default(cuid())
+  orderId       String
+  productId     String?
+  titleSnapshot String   @default("")
+  unitSnapshot  String   @default("")
+  priceSnapshot Int      @default(0) // сумах
+  qty           Int      @default(1)
+  lineTotal     Int      @default(0) // сумах
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model AnalyticsEvent {
+  id           String             @id @default(cuid())
+  name         AnalyticsEventName
+  locale       String             @default("")
+  productId    String             @default("")
+  productTitle String             @default("")
+  qty          Int                @default(0)
+  amount       Int                @default(0)
+  currency     String             @default("UZS")
+  path         String             @default("")
+  href         String             @default("")
+  userAgent    String             @default("")
+  ipHash       String             @default("")
+  createdAt    DateTime           @default(now())
+
+  @@index([name, createdAt])
+  @@index([productId, createdAt])
 }

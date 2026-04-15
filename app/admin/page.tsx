@@ -20,6 +20,9 @@ export default function AdminDashboardPage() {
           <Link href="/admin/products" className="inline-flex rounded-full border border-chocolate/20 bg-white px-5 py-2.5 text-sm font-semibold text-chocolate hover:border-turquoise">
             Товары
           </Link>
+          <Link href="/admin/orders" className="inline-flex rounded-full border border-chocolate/20 bg-white px-5 py-2.5 text-sm font-semibold text-chocolate hover:border-turquoise">
+            Заказы
+          </Link>
         </p>
 
         <ul className="mt-10 space-y-3 rounded-2xl border border-chocolate/10 bg-milk p-6 text-chocolate/85">

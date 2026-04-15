@@ -4,6 +4,7 @@ import { Header } from "@/components/header";
 import { getCatalogProducts } from "@/lib/catalog-data";
 import { Container } from "@/components/ui";
 import { formatPriceFromLine } from "@/components/site-data";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { getMergedCopy, getMergedLocalizedContactInfo, getSiteSettingsPayload } from "@/lib/site-settings";
 import { isLocale, Locale } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -102,15 +103,18 @@ export default async function LocalizedCatalogPage({ params }: { params: Promise
                     </p>
                     <p className="text-xs text-chocolate/55">{product.unit}</p>
                   </div>
-                  <Link
-                    href={`/${currentLocale}/contacts`}
-                    data-analytics-event="order_click"
-                    data-analytics-section="catalog"
-                    data-analytics-label={product.slug}
-                    className="rounded-full bg-inkBlue px-4 py-2 text-sm font-semibold text-milk transition hover:bg-turquoise"
-                  >
-                    {copy.details as string}
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <AddToCartButton productId={product.id} />
+                    <Link
+                      href={`/${currentLocale}/contacts`}
+                      data-analytics-event="order_click"
+                      data-analytics-section="catalog"
+                      data-analytics-label={product.slug}
+                      className="rounded-full border border-inkBlue/15 bg-white/70 px-4 py-2 text-sm font-semibold text-inkBlue transition hover:border-turquoise hover:text-turquoise"
+                    >
+                      {copy.details as string}
+                    </Link>
+                  </div>
                 </div>
               </article>
             ))}

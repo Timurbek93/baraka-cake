@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { SiteCopy } from "./site-data";
 import { getNavItems } from "./site-data";
 import { Container } from "./ui";
+import { CartBadge } from "@/components/cart-badge";
 import { Locale, locales } from "@/lib/i18n";
 
 function localizePath(pathname: string, nextLocale: Locale) {
@@ -75,6 +76,7 @@ export function Header({ locale, copy, whatsappHref }: HeaderProps) {
                 </Link>
               ))}
             </div>
+            <CartBadge locale={locale} />
             <Link
               href={whatsappHref}
               data-analytics-event="whatsapp_click"
@@ -137,6 +139,7 @@ export function Header({ locale, copy, whatsappHref }: HeaderProps) {
                   </Link>
                 ))}
               </div>
+              <CartBadge locale={locale} />
               <Link
                 href={whatsappHref}
                 data-analytics-event="whatsapp_click"
